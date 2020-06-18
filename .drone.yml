@@ -29,6 +29,8 @@ steps:
     - 'curl -X POST -H "Authorization: Bearer $TOKEN" http://212.47.229.210/api/v1/namespace > /tmp/kubeconfig.yaml'
     - 'export KUBECONFIG=/tmp/kubeconfig.yaml'
     - './kubectl get pods'
+    - './tests/e2e.sh deploy'
+    - './tests/e2e.sh test'
   when:
     branch:
     - drone
