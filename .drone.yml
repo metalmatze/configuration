@@ -19,6 +19,9 @@ steps:
 - name: tests
   image: alpine
   pull: always
+  settings:
+    token:
+      from_secret: token
   commands:
     - 'apk update --no-cache && apk add curl'
     - 'curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl'
