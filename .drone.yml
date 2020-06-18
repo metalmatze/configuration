@@ -19,8 +19,8 @@ steps:
 - name: tests
   image: alpine
   pull: always
-  settings:
-    token:
+  environment:
+    TOKEN:
       from_secret: token
   commands:
     - 'apk update --no-cache && apk add curl'
