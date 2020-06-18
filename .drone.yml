@@ -20,10 +20,12 @@ steps:
   image: alpine
   pull: always
   commands:
-    - 'apk update --no-cache && apk add kubectl'
+    - 'apk update --no-cache && apk add curl'
+    - 'curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl'
+    - 'chmod +x ./kubectl'
     - 'curl -X POST -H "Authorization: Bearer ${TOKEN}" http://212.47.229.210/api/v1/namespace > /tmp/kubeconfig.yaml'
     - 'export KUBECONFIG=/tmp/kubeconfig.yaml'
-    - 'kubectl get pods'
+    - './kubectl get pods'
   when:
     branch:
     - drone
