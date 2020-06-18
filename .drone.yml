@@ -1,0 +1,31 @@
+kind: pipeline
+name: build
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+# - name: build
+#   pull: always
+#   image: golang:1.14
+#   commands:
+#     - make generate
+#   environment:
+#     CGO_ENABLED: 0
+#     GO111MODULE: on
+#     GOPROXY: https://proxy.golang.org
+
+- name: tests
+  image: alpine
+  pull: always
+  commands:
+    - 'apk update --no-cache && apk add kubectl'
+    - 'curl -X POST -H "Authorization: Bearer ${TOKEN}" http://212.47.229.210/api/v1/namespace > /tmp/kubeconfig.yaml'
+    - 'export KUBECONFIG=/tmp/kubeconfig.yaml'
+    - 'kubectl get pods'
+  when:
+    branch:
+    - drone
+    event:
+    - push
