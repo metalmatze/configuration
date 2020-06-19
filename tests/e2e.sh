@@ -14,11 +14,11 @@ kind() {
 }
 
 deploy() {
-    $KUBECTL apply -f https://raw.githubusercontent.com/coreos/kube-prometheus/master/manifests/setup/prometheus-operator-0servicemonitorCustomResourceDefinition.yaml
-    $KUBECTL apply -f https://raw.githubusercontent.com/coreos/kube-prometheus/master/manifests/setup/prometheus-operator-0prometheusruleCustomResourceDefinition.yaml
-    $KUBECTL create ns dex || true
-    $KUBECTL create ns observatorium-minio || true
-    $KUBECTL create ns observatorium || true
+    # $KUBECTL apply -f https://raw.githubusercontent.com/coreos/kube-prometheus/master/manifests/setup/prometheus-operator-0servicemonitorCustomResourceDefinition.yaml
+    # $KUBECTL apply -f https://raw.githubusercontent.com/coreos/kube-prometheus/master/manifests/setup/prometheus-operator-0prometheusruleCustomResourceDefinition.yaml
+    # $KUBECTL create ns dex || true
+    # $KUBECTL create ns observatorium-minio || true
+    # $KUBECTL create ns observatorium || true
     $KUBECTL apply -f environments/dev/manifests/
 }
 
