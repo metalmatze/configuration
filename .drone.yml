@@ -17,7 +17,7 @@ steps:
 #     GOPROXY: https://proxy.golang.org
 
 - name: tests
-  image: alpine
+  image: golang:1.14-alpine
   pull: always
   environment:
     TOKEN:
@@ -29,6 +29,7 @@ steps:
     - 'curl -X POST -H "Authorization: Bearer $TOKEN" http://212.47.229.210/api/v1/namespace > /tmp/kubeconfig.yaml'
     - 'export KUBECONFIG=/tmp/kubeconfig.yaml'
     - 'export NAMESPACE=$(cat /tmp/kubeconfig.yaml | grep namespace: | cut -c 16-) && echo $NAMESPACE'
+    - 'make tests/manifests'
     - 'sh ./tests/e2e.sh deploy'
   when:
     branch:
