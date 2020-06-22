@@ -28,6 +28,7 @@ steps:
     - 'chmod +x ./kubectl'
     - 'curl -X POST -H "Authorization: Bearer $TOKEN" http://212.47.229.210/api/v1/namespace > /tmp/kubeconfig.yaml'
     - 'export KUBECONFIG=/tmp/kubeconfig.yaml'
+    - 'export NAMESPACE=$(cat /tmp/kubeconfig.yaml | grep 'namespace:' | cut -c 16-) && echo $NAMESPACE
     - 'sh ./tests/e2e.sh deploy'
   when:
     branch:

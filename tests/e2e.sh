@@ -4,6 +4,7 @@ set -e
 set -o pipefail
 
 KUBECTL="${KUBECTL:-./kubectl}"
+NAMESPACE="observatorium"
 OS_TYPE=$(echo `uname -s` | tr '[:upper:]' '[:lower:]')
 
 kind() {
@@ -19,7 +20,7 @@ deploy() {
     # $KUBECTL create ns dex || true
     # $KUBECTL create ns observatorium-minio || true
     # $KUBECTL create ns observatorium || true
-    $KUBECTL apply -f environments/dev/manifests/
+    $KUBECTL apply --namespace $NAMESPACE -f environments/dev/manifests/
 }
 
 wait_for_cr() {
