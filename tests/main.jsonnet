@@ -1,15 +1,22 @@
-local obs = (import '../environments/base/observatorium.jsonnet');
+local namespace = std.extVar('namespace');
+
+local obs = (import '../environments/base/observatorium.jsonnet') + {
+  config+:: {
+    namespace: namespace,
+  },
+};
 
 local dex = (import '../components/dex.libsonnet') + {
   config+:: {
     name: 'dex',
-    namespace: 'dex',
+    namespace: namespace,
   },
 };
 
 local up = (import '../components/up-job.libsonnet') + (import '../components/up-job.libsonnet').withResources + {
   config+:: {
     name: 'observatorium-up',
+    namespace: namespace,
     version: 'master-2020-05-15-716e0b4',
     image: 'quay.io/observatorium/up:' + self.version,
     commonLabels+:: {

@@ -11,7 +11,7 @@ BIN_DIR ?= $(shell pwd)/tmp/bin
 
 CONTROLLER_GEN ?= $(BIN_DIR)/controller-gen
 JB ?= $(BIN_DIR)/jb
-
+NAMESPACE?=observatorium
 
 # Generate manifests e.g. CRD, RBAC etc.
 manifests: $(CONTROLLER_GEN)
@@ -87,5 +87,5 @@ tests/manifests: tests/main.jsonnet $(JSONNET_SRC) vendor-jsonnet
 	-make jsonnetfmt
 	-rm -rf tests/manifests
 	-mkdir tests/manifests
-	jsonnet -J operator/jsonnet/vendor -m tests/manifests tests/main.jsonnet | xargs -I{} sh -c 'cat {} | gojsontoyaml > {}.yaml' -- {}
+	jsonnet -J operator/jsonnet/vendor -m tests/manifests --ext-str namespace=$(NAMESPACE) tests/main.jsonnet | xargs -I{} sh -c 'cat {} | gojsontoyaml > {}.yaml' -- {}
 	find tests/manifests -type f ! -name '*.yaml' -delete
