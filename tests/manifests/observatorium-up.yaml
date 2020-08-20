@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
       - args:
-        - --endpoint-write=http://observatorium-xyz-observatorium-api.observatorium.svc.cluster.local:8080/api/metrics/v1/test/api/v1/receive
-        - --endpoint-read=http://observatorium-xyz-observatorium-api.observatorium.svc.cluster.local:8080/api/metrics/v1/test/api/v1/query
+        - --endpoint-write=http://observatorium-xyz-observatorium-api.foobar.svc.cluster.local:8080/api/metrics/v1/test/api/v1/receive
+        - --endpoint-read=http://observatorium-xyz-observatorium-api.foobar.svc.cluster.local:8080/api/metrics/v1/test/api/v1/query
         - --period=1s
         - --duration=2m
         - --name=foo
@@ -41,7 +41,7 @@ spec:
         - |
           curl --request POST \
               --silent \
-              --url http://dex.dex.svc.cluster.local:5556/dex/token \
+              --url http://dex.foobar.svc.cluster.local:5556/dex/token \
               --header 'content-type: application/x-www-form-urlencoded' \
               --data grant_type=password \
               --data username=admin@example.com \

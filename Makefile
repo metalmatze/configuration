@@ -66,14 +66,14 @@ environments/base/manifests: environments/base/main.jsonnet $(JSONNET_SRC)
 	-make jsonnetfmt
 	-rm -rf environments/base/manifests
 	-mkdir environments/base/manifests
-	jsonnet -J operator/jsonnet/vendor -m environments/base/manifests environments/base/main.jsonnet | xargs -I{} sh -c 'cat {} | gojsontoyaml > {}.yaml' -- {}
+	jsonnet -J operator/jsonnet/vendor -m environments/base/manifests --ext-str namespace=$(NAMESPACE) environments/base/main.jsonnet | xargs -I{} sh -c 'cat {} | gojsontoyaml > {}.yaml' -- {}
 	find environments/base/manifests -type f ! -name '*.yaml' -delete
 
 environments/dev/manifests: environments/dev/main.jsonnet $(JSONNET_SRC) vendor-jsonnet
 	-make jsonnetfmt
 	-rm -rf environments/dev/manifests
 	-mkdir environments/dev/manifests
-	jsonnet -J operator/jsonnet/vendor -m environments/dev/manifests environments/dev/main.jsonnet | xargs -I{} sh -c 'cat {} | gojsontoyaml > {}.yaml' -- {}
+	jsonnet -J operator/jsonnet/vendor -m environments/dev/manifests --ext-str namespace=$(NAMESPACE) environments/dev/main.jsonnet | xargs -I{} sh -c 'cat {} | gojsontoyaml > {}.yaml' -- {}
 	find environments/dev/manifests -type f ! -name '*.yaml' -delete
 
 example/manifests: example/main.jsonnet $(JSONNET_SRC) vendor-jsonnet
