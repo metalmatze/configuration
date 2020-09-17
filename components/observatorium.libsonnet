@@ -111,7 +111,6 @@ local k = import 'github.com/ksonnet/ksonnet-lib/ksonnet.beta.4/k.libsonnet';
           'app.kubernetes.io/name': 'thanos-store',
           'app.kubernetes.io/version': obs.config.thanosVersion,
           'store.observatorium.io/shard': 'shard-' + i,
-
         },
         replicas: 1,
         ignoreDeletionMarksDelay: '24h',
@@ -155,61 +154,6 @@ local k = import 'github.com/ksonnet/ksonnet-lib/ksonnet.beta.4/k.libsonnet';
     for i in std.range(0, obs.config.store.shards - 1)
   },
 
-  // store:: {
-  //   ['shard' + i]:
-  //     t.store +
-  //     t.store.withIndexCacheMemcached +
-  //     t.store.withCachingBucketMemcached +
-  //     t.store.withIgnoreDeletionMarksDelay {
-  //       config+:: {
-  //         local cfg = self,
-  //         name: obs.config.name + '-' + cfg.commonLabels['app.kubernetes.io/name'] + '-shard-' + i,
-  //         namespace: obs.config.namespace,
-  //         commonLabels+:: obs.config.commonLabels {
-  //           'store.observatorium.io/shard': 'shard-' + i,
-  //         },
-  //         replicas: 1,
-  //         ignoreDeletionMarksDelay: '24h',
-  //         memcached+: {
-  //           addresses: ['dnssrv+_client._tcp.%s.%s.svc' % [obs.storeCache.service.metadata.name, obs.storeCache.service.metadata.namespace]],
-  //           timeout: '2s',
-  //           maxIdleConnections: 1000,
-  //           maxAsyncConcurrency: 100,
-  //           maxAsyncBufferSize: 100000,
-  //           maxGetMultiConcurrency: 900,
-  //           maxGetMultiBatchSize: 1000,
-  //         },
-  //       },
-  //     } + {
-  //       statefulSet+: {
-  //         spec+: {
-  //           template+: {
-  //             spec+: {
-  //               containers: [
-  //                 if c.name == 'thanos-store' then c {
-  //                   args+: [
-  //                     |||
-  //                       --selector.relabel-config=
-  //                         - action: hashmod
-  //                           source_labels: ["__block_id"]
-  //                           target_label: shard
-  //                           modulus: %d
-  //                         - action: keep
-  //                           source_labels: ["shard"]
-  //                           regex: %d
-  //                     ||| % [obs.config.store.shards, i],
-  //                   ],
-  //                 } else c
-  //                 for c in super.containers
-  //               ],
-  //             },
-  //           },
-  //         },
-  //       },
-  //     }
-  //   for i in std.range(0, obs.config.store.shards - 1)
-  // },
-
   storeCache:: (import 'memcached.libsonnet') + {
     config+:: {
       local cfg = self,
@@ -243,25 +187,6 @@ local k = import 'github.com/ksonnet/ksonnet-lib/ksonnet.beta.4/k.libsonnet';
         [obs.receivers[hashring].service for hashring in std.objectFields(obs.receivers)]
     ],
   }),
-
-  // query:: t.query + t.query.withQueryTimeout {
-  //   config+:: {
-  //     local cfg = self,
-  //     name: obs.config.name + '-' + cfg.commonLabels['app.kubernetes.io/name'],
-  //     namespace: obs.config.namespace,
-  //     commonLabels+:: obs.config.commonLabels,
-  //     replicas: 1,
-  //     queryTimeout: '15m',
-  //     stores: [
-  //       'dnssrv+_grpc._tcp.%s.%s.svc.cluster.local' % [service.metadata.name, service.metadata.namespace]
-  //       for service in
-  //         [obs.rule.service] +
-  //         [obs.store[shard].service for shard in std.objectFields(obs.store)] +
-  //         [obs.receivers[hashring].service for hashring in std.objectFields(obs.receivers)]
-  //     ],
-  //     replicaLabels: obs.config.replicaLabels,
-  //   },
-  // },
 
   queryFrontend::
     t.queryFrontend +
