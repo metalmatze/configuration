@@ -35,7 +35,7 @@ spec:
                 - key: app.kubernetes.io/name
                   operator: In
                   values:
-                  - thanos-query
+                  - observatorium-xyz-thanos-query
               namespaces:
               - observatorium
               topologyKey: kubernetes.io/hostname
@@ -43,7 +43,6 @@ spec:
       containers:
       - args:
         - query
-        - --log.level=info
         - --grpc-address=0.0.0.0:10901
         - --http-address=0.0.0.0:9090
         - --query.replica-label=prometheus_replica
@@ -74,5 +73,6 @@ spec:
             port: 9090
             scheme: HTTP
           periodSeconds: 5
+        resources: {}
         terminationMessagePolicy: FallbackToLogsOnError
       terminationGracePeriodSeconds: 120
